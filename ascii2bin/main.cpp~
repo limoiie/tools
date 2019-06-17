@@ -1,0 +1,28 @@
+#include <iostream>
+
+#include "clipp.h"
+
+using namespace clipp;
+using std::string;
+using std::cout;
+
+using namespace std;
+
+// SYNOPSIS
+//     convert <input file> [-r] [-o <output format>] [-utf16]
+
+// OPTIONS
+//     -r, --recursive  convert files recursively
+//     -utf16           use UTF-16 encoding
+int main(int argc, char* argv[]) {
+  bool rec = false, utf16 = false;
+  string infile = "", fmt = "csv";
+  auto cli = (value("input file", infile),
+              option("-r", "--recursive").set(rec).doc("convert files recursively"),
+              option("-o") & value("output format", fmt),
+              option("-utf16").set(utf16).doc("ues UTF-16 encoding")
+              );
+  if (!parse(argc, argv, cli))
+    cout << make_man_page(cli, argv[0]);
+  return 0;
+}
